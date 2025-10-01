@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Box, Typography, Button } from '@mui/material';
 
 interface ImageUploadPreviewProps {
   onImageChange: (file: File | null) => void;
@@ -35,40 +34,25 @@ const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: 'auto', textAlign: 'center' }}>
-      <Typography variant="h5" gutterBottom>
-        Upload Your Selfie
-      </Typography>
+    <div className="card">
+      <h2>Upload Your Selfie</h2>
       {!previewUrl ? (
-        <Box
-          {...getRootProps()}
-          sx={{
-            border: '2px dashed',
-            borderColor: isDragActive ? 'primary.main' : 'grey.400',
-            borderRadius: 2,
-            p: 4,
-            cursor: 'pointer',
-            backgroundColor: isDragActive ? 'primary.light' : 'grey.100',
-            transition: 'border-color 0.2s',
-          }}
-        >
+        <div {...getRootProps()} className="upload-area">
           <input {...getInputProps()} />
-          <Typography variant="body1" sx={{ mb: 2 }}>
+          <p>
             {isDragActive ? 'Drop the image here...' : 'Drag & drop a selfie here, or click to select'}
-          </Typography>
-          <Button variant="contained">Choose File</Button>
-        </Box>
+          </p>
+          <button className="btn">Choose File</button>
+        </div>
       ) : (
-        <Box>
-          <img src={previewUrl} alt="Preview" style={{ maxWidth: '100%', maxHeight: 300, borderRadius: 8 }} />
-          <Box sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={removeImage}>
-              Remove Image
-            </Button>
-          </Box>
-        </Box>
+        <div>
+          <img src={previewUrl} alt="Preview" style={{ maxWidth: '100%', maxHeight: 300, borderRadius: '12px', boxShadow: 'var(--shadow)' }} />
+          <button className="btn" onClick={removeImage} style={{ marginTop: '1rem' }}>
+            Remove Image
+          </button>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

@@ -1,21 +1,4 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import DownloadIcon from '@mui/icons-material/Download';
-import EditIcon from '@mui/icons-material/Edit';
 
 interface ResultsGalleryProps {
   images: string[];
@@ -34,78 +17,62 @@ const ResultsGallery: React.FC<ResultsGalleryProps> = ({ images, onEdit }) => {
   };
 
   const handleDownload = (url: string) => {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'headshot.jpg';
-    link.click();
+    window.open(url, '_blank');
   };
 
   if (images.length === 0) {
     return (
-      <Box sx={{ textAlign: 'center', py: 4 }}>
-        <Typography variant="body1" color="textSecondary">
-          Generated headshots will appear here.
-        </Typography>
-      </Box>
+      <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+        <p>Generated headshots will appear here.</p>
+      </div>
     );
   }
 
   return (
-    <Box sx={{ mt: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        Your Generated Headshots
-      </Typography>
-      <Grid container spacing={2}>
+    <div className="card">
+      <h2>Your Generated Headshots</h2>
+      <div className="results-grid">
         {images.map((img, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card>
-              <CardActionArea onClick={() => handleEnlarge(img)}>
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={img}
-                  alt={`Headshot ${index + 1}`}
-                />
-              </CardActionArea>
-              <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Button
-                  startIcon={<DownloadIcon />}
-                  onClick={() => handleDownload(img)}
-                  variant="outlined"
-                  size="small"
-                >
-                  Download
-                </Button>
-                {onEdit && (
-                  <IconButton onClick={() => onEdit(img)}>
-                    <EditIcon />
-                  </IconButton>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
+          <div key={index} style={{ position: 'relative' }}>
+            <img
+              src={img}
+              alt={`Headshot ${index + 1}`}
+              onClick={() => handleEnlarge(img)}
+              style={{ cursor: 'pointer' }}
+            />
+            <div style={{ position: 'absolute', bottom: '10px', left: '10px', right: '10px', display: 'flex', justifyContent: 'space-between' }}>
+              <button className="btn" onClick={(e) => { e.stopPropagation(); handleDownload(img); }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>
+                📥 Download
+              </button>
+              {onEdit && (
+                <button className="btn" onClick={(e) => { e.stopPropagation(); onEdit(img); }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>
+                  ✏️ Edit
+                </button>
+              )}
+            </div>
+          </div>
         ))}
-      </Grid>
+      </div>
 
-      <Dialog open={!!enlargedImage} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogContent sx={{ position: 'relative', textAlign: 'center' }}>
-          <IconButton
-            onClick={handleClose}
-            sx={{ position: 'absolute', top: 8, right: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-          {enlargedImage && (
-            <img src={enlargedImage} alt="Enlarged headshot" style={{ maxWidth: '100%', maxHeight: '80vh' }} />
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => enlargedImage && handleDownload(enlargedImage)} startIcon={<DownloadIcon />}>
-            Download
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+      {enlargedImage && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }}>
+            <button
+              onClick={handleClose}
+              style={{ position: 'absolute', top: '-40px', right: 0, background: 'transparent', border: 'none', color: 'white', fontSize: '2rem', cursor: 'pointer' }}
+            >
+              ×
+            </button>
+            <img src={enlargedImage} alt="Enlarged headshot" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+              <button className="btn" onClick={() => handleDownload(enlargedImage!)}>
+                📥 Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

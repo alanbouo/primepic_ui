@@ -1,13 +1,4 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  Box,
-} from '@mui/material';
 
 interface EditControlsProps {
   imageUrl: string;
@@ -24,35 +15,32 @@ const EditControls: React.FC<EditControlsProps> = ({ imageUrl, open, onApplyEdit
     onClose();
   };
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Edit Headshot</DialogTitle>
-      <DialogContent>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          <img src={imageUrl} alt="Editing" style={{ maxHeight: 300, maxWidth: '100%' }} />
-        </Box>
-        <Typography variant="body1" gutterBottom>
-          Choose an edit to apply:
-        </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
-          <Button
-            variant="outlined"
-            onClick={() => applyEdit('remove-bg')}
-          >
-            Remove Background
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => applyEdit('adjust-lighting')}
-          >
-            Adjust Lighting
-          </Button>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-      </DialogActions>
-    </Dialog>
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 2000 }}>
+      <div className="card" style={{ maxWidth: '90vw', maxHeight: '90vh', position: 'relative' }}>
+        <button
+          onClick={onClose}
+          style={{ position: 'absolute', top: '-40px', right: 0, background: 'transparent', border: 'none', color: 'white', fontSize: '2rem', cursor: 'pointer' }}
+        >
+          ×
+        </button>
+        <h2>Edit Headshot</h2>
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+          <img src={imageUrl} alt="Editing" style={{ maxHeight: 300, maxWidth: '100%', borderRadius: '12px' }} />
+        </div>
+        <p>Choose an edit to apply:</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
+          <button className="btn" onClick={() => applyEdit('remove-bg')}>
+            ✨ Remove Background
+          </button>
+          <button className="btn" onClick={() => applyEdit('adjust-lighting')}>
+            💡 Adjust Lighting
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

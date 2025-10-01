@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, CircularProgress, Box, Typography } from '@mui/material';
 
 interface GenerateButtonProps {
   loading: boolean;
@@ -15,30 +14,28 @@ const GenerateButton: React.FC<GenerateButtonProps> = ({ loading, onGenerate, di
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 4 }}>
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '2rem 0' }}>
+      <button
+        className="btn"
         onClick={handleClick}
         disabled={disabled || loading}
-        sx={{ minWidth: 200, minHeight: 48 }}
+        style={{ minWidth: '200px', minHeight: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
         {loading ? (
           <>
-            <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+            <div className="loading-spinner" style={{ marginRight: '0.5rem' }}></div>
             Generating...
           </>
         ) : (
           'Generate Headshots'
         )}
-      </Button>
+      </button>
       {loading && (
-        <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+        <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
           Please wait, processing your image...
-        </Typography>
+        </p>
       )}
-    </Box>
+    </div>
   );
 };
 
